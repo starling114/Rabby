@@ -30,7 +30,7 @@ const SortHat = () => {
 
     await wallet.tryUnlock();
     if (!(await wallet.isUnlocked())) {
-      setTo('/unlock');
+      setTo('/no-address');
       return;
     }
     if (
