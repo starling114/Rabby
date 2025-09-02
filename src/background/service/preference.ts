@@ -201,7 +201,7 @@ class PreferenceService {
         collectionStarred: [],
         hiddenBalance: false,
         isShowTestnet: false,
-        themeMode: DARK_MODE_TYPE.light,
+        themeMode: DARK_MODE_TYPE.dark,
         addressSortStore: {
           ...defaultAddressSortStore,
         },

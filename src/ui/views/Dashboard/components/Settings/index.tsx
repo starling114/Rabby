@@ -1318,7 +1318,7 @@ const SettingsInner = ({
   const lockWallet = async () => {
     reportSettings('lockWallet');
     await wallet.lockWallet();
-    history.push('/unlock');
+    history.push('/no-address');
   };
 
   const handleClose: DrawerProps['onClose'] = (e) => {
