@@ -41,7 +41,7 @@ const SortHat = () => {
       ) {
         setTo('/connect-approval');
       } else {
-        setTo('/unlock');
+        setTo('/no-address');
       }
       return;
     }

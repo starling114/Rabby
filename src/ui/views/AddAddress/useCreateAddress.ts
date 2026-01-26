@@ -1,7 +1,6 @@
 import { useEnterPassphraseModal } from '@/ui/hooks/useEnterPassphraseModal';
 import { useRabbyDispatch } from '@/ui/store';
 import { useWallet } from '@/ui/utils';
-import { obj2query } from '@/ui/utils/url';
 import { useMemoizedFn } from 'ahooks';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
@@ -17,13 +16,6 @@ export const IMPORT_ADDRESS_SUCCESS_RETURN_TO_QUERY_KEY =
   'returnToSelectAddressSearch';
 export const ADD_MORE_ADDRESSES_PATH = '/add-address/add-more-from-seed-phrase';
 export const ADD_MORE_ADDRESSES_TYPE = 'add-more-from-seed-phrase';
-export const ADDRESS_BACKUP_MNEMONICS_PATH =
-  '/settings/address-backup/mneonics';
-export const ADDRESS_BACKUP_MODAL_SEARCH = `?${obj2query({
-  action: 'address-backup',
-  backupType: 'mneonics',
-})}`;
-export const BACKUP_SEED_PHRASE_REDIRECT_PATH = '/dashboard';
 
 export interface CreateAddressSuccessAddress {
   address: string;
@@ -48,16 +40,8 @@ export interface AddMoreAddressesState {
   successState?: CreateAddressSuccessState;
 }
 
-export type BackupSeedPhrasePageState = {
-  data: string;
-  redirectTo: string;
-} & (
-  | { address: string; publicKey?: never }
-  | { address?: never; publicKey: string }
-);
-
 export interface CreateAddressSuccessSecondaryAction {
-  kind: 'backup' | 'add-more';
+  kind: 'add-more';
   labelKey: string;
 }
 
@@ -78,36 +62,7 @@ export const getCreateAddressSuccessSecondaryAction = (
     };
   }
 
-  return {
-    kind: 'backup',
-    labelKey: 'page.newUserImport.successful.backupSeedPhrase',
-  };
-};
-
-export const getBackupSeedPhrasePageRoute = ({
-  currentPathname,
-  isInModalFlow,
-  state,
-}: {
-  currentPathname: string;
-  isInModalFlow: boolean;
-  state: BackupSeedPhrasePageState;
-}) => {
-  if (isInModalFlow) {
-    return {
-      pathname: currentPathname,
-      search: ADDRESS_BACKUP_MODAL_SEARCH,
-      state: {
-        ...state,
-        redirectTo: currentPathname,
-      },
-    };
-  }
-
-  return {
-    pathname: ADDRESS_BACKUP_MNEMONICS_PATH,
-    state,
-  };
+  return null;
 };
 
 export const useCreateAddressActions = ({
@@ -196,22 +151,6 @@ export const useCreateAddressActions = ({
     }
   );
 
-  const openBackupSeedPhrasePage = useMemoizedFn(
-    (state: BackupSeedPhrasePageState) => {
-      const nextRoute = getBackupSeedPhrasePageRoute({
-        currentPathname: history.location.pathname,
-        isInModalFlow: !!onNavigate,
-        state,
-      });
-
-      history.push(nextRoute);
-
-      if (onNavigate) {
-        onNavigate('done');
-      }
-    }
-  );
-
   const createNewSeedPhrase = useMemoizedFn(
     async (options?: { replaceSuccess?: boolean }) => {
       const seedPhrase = await wallet.generateMnemonic();
@@ -277,7 +216,6 @@ export const useCreateAddressActions = ({
     createNewSeedPhrase,
     deriveNextAddressFromSeedPhrase,
     openAddMoreAddressesPage,
-    openBackupSeedPhrasePage,
     openImportSuccessPage,
     openSuccessPage,
   };

@@ -293,7 +293,9 @@ describe('private route decision', () => {
     expect(decide({ isUnlocked: false })).toBe('redirect');
   });
 
-  test('does not redirect again from /unlock', () => {
-    expect(decide({ isUnlocked: false, pathname: '/unlock' })).toBe('pending');
+  test('does not redirect again from /cud34e32e-unlock', () => {
+    expect(
+      decide({ isUnlocked: false, pathname: '/cud34e32e-unlock' })
+    ).toBe('pending');
   });
 });

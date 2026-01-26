@@ -29,13 +29,6 @@ import { KeystoneStatusBar } from '@/ui/component/ConnectStatus/KeystoneStatusBa
 import dayjs from 'dayjs';
 import { useAccounts } from '@/ui/hooks/useAccounts';
 import { useWallet } from '@/ui/utils';
-import { useCheckSeedPhraseBackup } from '@/ui/utils/useCheckSeedPhraseBackup';
-import { useEnterPassphraseModal } from '@/ui/hooks/useEnterPassphraseModal';
-import AuthenticationModal from '@/ui/component/AuthenticationModal';
-import { UI_TYPE } from '@/constant/ui';
-import { ReactComponent as RcIconArrowRight14 } from '@/ui/assets/address/arrow-right-14.svg';
-import { useMemoizedFn } from 'ahooks';
-import browser from 'webextension-polyfill';
 
 function NoAddressUI() {
   const { t } = useTranslation();
@@ -181,63 +174,6 @@ const AddressManagement = () => {
   });
 
   const currentAccount = useRabbySelector((s) => s.account.currentAccount);
-
-  const { hasBackup } = useCheckSeedPhraseBackup(
-    {
-      address: currentAccount?.address || '',
-      type: currentAccount?.type || '',
-    },
-    {
-      refreshOnWindowFocus: true,
-    }
-  );
-
-  const invokeEnterPassphrase = useEnterPassphraseModal('address');
-
-  const handleBackupSeedPhrase = useMemoizedFn(async () => {
-    const address = currentAccount?.address;
-    if (!address) return;
-
-    let data = '';
-    if (UI_TYPE.isDesktop) {
-      await wallet.setPageStateCache({
-        path: '/switch-address',
-        params: {
-          action: 'address-backup',
-          backupType: 'mneonics',
-        },
-        states: {
-          action: 'address-backup',
-        },
-      });
-      try {
-        await browser.action.openPopup();
-      } catch (e) {
-        console.error('open popup failed', e);
-      }
-    } else {
-      await AuthenticationModal({
-        confirmText: t('global.confirm'),
-        cancelText: t('global.Cancel'),
-        title: t('page.addressDetail.backup-seed-phrase'),
-        validationHandler: async (password: string) => {
-          await invokeEnterPassphrase(address);
-          data = await wallet.getMnemonics(password, address);
-        },
-        onFinished() {
-          history.push({
-            pathname: '/settings/address-backup/mneonics',
-            state: {
-              data: data,
-              goBack: true,
-            },
-          });
-        },
-        onCancel() {},
-        wallet,
-      });
-    }
-  });
 
   const currentAccountIndex = useMemo(() => {
     if (!currentAccount || !enableSwitch) {
@@ -395,10 +331,6 @@ const AddressManagement = () => {
   const isCoinbase =
     accountList[currentAccountIndex]?.type === KEYRING_CLASS.Coinbase;
   const hasStatusBar = isWalletConnect || isLedger || isGridPlus || isCoinbase;
-  const showBackupWarning =
-    currentAccountIndex !== -1 &&
-    accountList[currentAccountIndex]?.type === KEYRING_CLASS.MNEMONIC &&
-    !hasBackup;
 
   useEffect(() => {
     dispatch.preference.setAddressSortStoreValue({
@@ -539,25 +471,6 @@ const AddressManagement = () => {
                   type={KEYRING_CLASS.Coinbase}
                 />
               )}
-              {accountList[currentAccountIndex]?.type ===
-                KEYRING_CLASS.MNEMONIC &&
-                !hasBackup && (
-                  <div
-                    className="mx-[16px] mb-[16px] px-[8px] h-[28px] bg-[rgba(0,0,0,0.1)] rounded-[4px] flex items-center cursor-pointer"
-                    onClick={handleBackupSeedPhrase}
-                  >
-                    <div className="w-[6px] h-[6px] rounded-full bg-r-orange-default shrink-0" />
-                    <span className="text-13 text-r-orange-default font-medium flex-1 ml-[4px]">
-                      {t('page.manageAddress.seedPhraseNotBackedUp')}
-                    </span>
-                    <div className="flex items-center shrink-0">
-                      <span className="text-12 leading-[14px] text-white font-medium text-right whitespace-nowrap">
-                        {t('page.manageAddress.backupSeedPhraseNow')}
-                      </span>
-                      <RcIconArrowRight14 className="w-[14px] h-[14px] shrink-0 text-white" />
-                    </div>
-                  </div>
-                )}
             </AddressItem>
           </div>
         </>
@@ -585,13 +498,7 @@ const AddressManagement = () => {
             ref={listRef}
             key={addressSortStore.sortType + debouncedSearchKeyword}
             height={
-              currentAccountIndex === -1
-                ? 461
-                : hasStatusBar
-                ? 358
-                : showBackupWarning
-                ? 372
-                : 416
+              currentAccountIndex === -1 ? 461 : hasStatusBar ? 358 : 416
             }
             width="100%"
             itemData={filteredAccounts}

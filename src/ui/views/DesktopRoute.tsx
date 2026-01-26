@@ -83,7 +83,7 @@ const Main = () => {
         </PrivateRouteGuard>
       ) : null}
 
-      {location.pathname !== '/unlock' ? (
+      {location.pathname !== '/cud34e32e-unlock' ? (
         <>
           <CommonPopup />
           <PortalHost />

@@ -23,7 +23,6 @@ import { useListenTxReload } from './hooks/useListenTxReload';
 import { GnosisQueueModal } from './components/GnosisQueueModal';
 import { ApprovalsTabPane } from './components/ApprovalsTabPane';
 import { AddressDetailModal } from './components/AddressDetailModal';
-import { AddressBackupModal } from './components/AddressBackupModal';
 import {
   RcIconBackTopCC,
   RcIconQueueCC,
@@ -466,13 +465,6 @@ const DesktopProfileContent: React.FC<DesktopProfileProps> = ({
 
       <AddressDetailModal
         visible={action === 'address-detail'}
-        onCancel={() => {
-          history.replace(history.location.pathname);
-        }}
-        destroyOnClose
-      />
-      <AddressBackupModal
-        visible={action === 'address-backup'}
         onCancel={() => {
           history.replace(history.location.pathname);
         }}

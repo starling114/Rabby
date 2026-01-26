@@ -12,7 +12,7 @@ export const PrivateRouteGuard = ({ children }) => {
   const isInitialized = useWalletStatusStore((state) => state.isInitialized);
   const isSyncing = useWalletStatusStore((state) => state.isSyncing);
   // `from` lets Unlock return here instead of the default page.
-  const unlockTo = `/unlock?from=${encodeURIComponent(
+  const unlockTo = `/no-address?from=${encodeURIComponent(
     location.pathname + location.search
   )}`;
   const to = !isBooted ? '/welcome' : unlockTo;

@@ -21,7 +21,7 @@ import { useImportMnemonicsStore } from '@/ui/state/importMnemonics';
 import { useAsync, useClickAway } from 'react-use';
 import { useNewUserGuideStore } from './hooks/useNewUserGuideStore';
 import { BRAND_ALIAN_TYPE_TEXT, KEYRING_CLASS, KEYRING_TYPE } from '@/constant';
-import { useDocumentVisibility, useMemoizedFn, useRequest } from 'ahooks';
+import { useDocumentVisibility, useRequest } from 'ahooks';
 import { GnosisChainList } from './GnosisChainList';
 import {
   AccountItemAddress,
@@ -230,12 +230,6 @@ export const ImportOrCreatedSuccess = () => {
     );
   };
 
-  const handleBackup = useMemoizedFn(() => {
-    history.push(
-      `/new-user/backup-seed-phrase?address=${accounts?.[0]?.address}`
-    );
-  });
-
   const closeConnect = React.useCallback(() => {
     if (store.clearKeyringId) {
       wallet.requestKeyring(hd, 'cleanUp', store.clearKeyringId, true);
@@ -366,39 +360,21 @@ export const ImportOrCreatedSuccess = () => {
         </Button>
 
         {hd ? (
-          isCreated && isSeedPhrase && store.seedPhrase ? (
-            <Button
-              size="large"
-              type="ghost"
-              onClick={handleBackup}
-              className={clsx(
-                'mt-12',
-                'h-[52px] shadow-none rounded-[8px]',
-                'text-blue-light',
-                'border-blue-light',
-                'hover:bg-[#8697FF1A] active:bg-[#0000001A]',
-                'before:content-none'
-              )}
-            >
-              {t('page.newUserImport.successful.backupSeedPhrase')}
-            </Button>
-          ) : (
-            <div
-              onClick={addMoreAddr}
-              className="flex items-center justify-center gap-2 text-[13px] leading-[16px] text-r-neutral-foot mt-[16px] cursor-pointer"
-            >
-              {isSeedPhrase ? (
-                <span>{t('page.newUserImport.successful.addMoreAddr')}</span>
-              ) : (
-                <span>
-                  {t('page.newUserImport.successful.addMoreFrom', {
-                    name: brand || BRAND_ALIAN_TYPE_TEXT[hd] || hd,
-                  })}
-                </span>
-              )}
-              <RcIconExternalCC className="w-20 h-20" viewBox="0 0 16 17" />
-            </div>
-          )
+          <div
+            onClick={addMoreAddr}
+            className="flex items-center justify-center gap-2 text-[13px] leading-[16px] text-r-neutral-foot mt-[16px] cursor-pointer"
+          >
+            {isSeedPhrase ? (
+              <span>{t('page.newUserImport.successful.addMoreAddr')}</span>
+            ) : (
+              <span>
+                {t('page.newUserImport.successful.addMoreFrom', {
+                  name: brand || BRAND_ALIAN_TYPE_TEXT[hd] || hd,
+                })}
+              </span>
+            )}
+            <RcIconExternalCC className="w-20 h-20" viewBox="0 0 16 17" />
+          </div>
         ) : null}
       </Card>
       <div

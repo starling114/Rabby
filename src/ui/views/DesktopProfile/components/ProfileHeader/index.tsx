@@ -8,8 +8,6 @@ import QRCode from 'qrcode.react';
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { BalanceView } from './BalanceView';
-import { SeedPhraseBackupAlert } from '@/ui/component/SeedPhraseBackupAlert';
-import clsx from 'clsx';
 
 const GlobalStyle = createGlobalStyle`
   .global-qr-code-popover {
@@ -76,7 +74,6 @@ export const ProfileHeader: React.FC<{
                 <RcIconQrCodeCC />
               </div>
             </Popover>
-            <SeedPhraseBackupAlert className={clsx('rounded-[8px]')} />
           </div>
         </div>
 

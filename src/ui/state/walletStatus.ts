@@ -60,8 +60,8 @@ export const resolvePrivateRouteDecision = ({
   if (isUnlocked) {
     return 'render';
   }
-  // Guards keep running on /unlock; redirecting again would nest `from` and loop.
-  if (pathname === '/unlock') {
+  // Guards keep running on unlock; redirecting again would nest `from` and loop.
+  if (pathname === '/cud34e32e-unlock') {
     return 'pending';
   }
   return 'redirect';

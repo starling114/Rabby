@@ -4,7 +4,6 @@ import { useRabbyDispatch } from '@/ui/store';
 import React, { useCallback, useState } from 'react';
 import { IDisplayedAccountWithBalance } from '@/ui/state/accountToDisplay';
 import { ReactComponent as IconPlus } from '@/ui/assets/address/plus.svg';
-import { ReactComponent as RcIconShowSeedPhrase } from '@/ui/assets/address/show-seed-phrase.svg';
 import { ReactComponent as RcIconDelete } from '@/ui/assets/address/delete-current-color.svg';
 import { ReactComponent as RcIconPlusButton } from '@/ui/assets/import/plus.svg';
 
@@ -16,7 +15,7 @@ import { AddressDeleteModal } from './AddressDeleteModal';
 import { Button, message, Spin } from 'antd';
 import IconSuccess from '@/ui/assets/success.svg';
 import { GroupItem } from './GroupItem';
-import { useBackUp, useWalletTypeData } from './hooks';
+import { useWalletTypeData } from './hooks';
 import { SeedPhraseDeleteModal } from './SeedPhraseDelete';
 import { AccountList } from './List';
 import { LedgerHDPathTypeLabel } from '@/ui/utils/ledger';
@@ -73,8 +72,6 @@ const ManageAddress = () => {
 
   const isLedger =
     TypedWalletObj?.[activeIndex]?.type === KEYRING_CLASS.HARDWARE.LEDGER;
-
-  const backup = useBackUp();
 
   const [open, setOpen] = useState(false);
   const [deleteGroup, setDeleteGroup] = useState(false);
@@ -314,19 +311,6 @@ const ManageAddress = () => {
                         <RcIconPlusButton
                           onClick={handleAddSeedPhraseAddress}
                           className="cursor-pointer text-r-neutral-body"
-                        />
-                      )}
-                      {isSeedPhrase && (
-                        <RcIconShowSeedPhrase
-                          className="cursor-pointer text-r-neutral-body"
-                          onClick={() => {
-                            if (TypedWalletObj?.[activeIndex]?.publicKey) {
-                              backup(
-                                TypedWalletObj[activeIndex].publicKey!,
-                                currentIndex
-                              );
-                            }
-                          }}
                         />
                       )}
                       <RcIconDelete

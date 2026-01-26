@@ -2,7 +2,6 @@ import { CHAINS_ENUM } from '@/types/chain';
 import { ReactComponent as RcIconArrowRightCC } from '@/ui/assets/receive/right-cc.svg';
 import { Modal } from '@/ui/component';
 import ChainSelectorModal from '@/ui/component/ChainSelector/Modal';
-import { SeedPhraseBackupAlert } from '@/ui/component/SeedPhraseBackupAlert';
 import ThemeIcon from '@/ui/component/ThemeMode/ThemeIcon';
 import { copyAddress } from '@/ui/utils/clipboard';
 import { filterRbiSource, useRbiSource } from '@/ui/utils/ga-event';
@@ -290,12 +289,6 @@ const Receive = () => {
           </div>
         </div>
 
-        <SeedPhraseBackupAlert
-          className={clsx(
-            'text-r-red-default bg-r-red-light rounded-[8px]',
-            'mb-[8px] mt-[-12px]'
-          )}
-        />
         <OfflineChainNotify
           className="receive-offline-chain-notify w-full"
           itemClassName="rounded-[8px] mb-[8px]"

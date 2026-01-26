@@ -25,7 +25,6 @@ import { RcIconSettingCC } from '@/ui/assets/dashboard';
 import { ReactComponent as RcIconGasFullCC } from '@/ui/assets/gas-full-cc.svg';
 import { ReactComponent as RcIconGasLowCC } from '@/ui/assets/gas-low-cc.svg';
 import { CommonSignal } from '@/ui/component/ConnectStatus/CommonSignal';
-import { SeedPhraseBackupAlert } from '@/ui/component/SeedPhraseBackupAlert';
 import { useWalletConnectIcon } from '@/ui/component/WalletConnect/useWalletConnectIcon';
 import { useCurrentAccount } from '@/ui/hooks/backgroundState/useAccount';
 import { copyAddress } from '@/ui/utils/clipboard';
@@ -242,7 +241,6 @@ export const DashboardHeader: React.FC<{ onSettingClick?(): void }> = ({
           <BalanceView currentAccount={currentAccount} />
         )
       )}
-      <SeedPhraseBackupAlert className="absolute left-0 right-0 bottom-0" />
     </Container>
   );
 };

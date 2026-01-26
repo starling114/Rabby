@@ -12,13 +12,10 @@ import { useWallet } from '@/ui/utils';
 import { sortAccountsByBalance } from '@/ui/utils/account';
 import { groupBy, omit } from 'lodash';
 import { nanoid } from 'nanoid';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useEffect, useMemo, useRef } from 'react';
 import { useAsync } from 'react-use';
-import AuthenticationModalPromise from '@/ui/component/AuthenticationModal';
 import i18n from '@/i18n';
 import { useTranslation } from 'react-i18next';
-import { useEnterPassphraseModal } from '@/ui/hooks/useEnterPassphraseModal';
 
 export type DisplayedAccount = IDisplayedAccountWithBalance & {
   hdPathBasePublicKey?: string;
@@ -283,46 +280,4 @@ export const useWalletTypeData = () => {
     loading: loading || loadingAccounts,
     highlightedAddresses,
   };
-};
-
-export const useBackUp = () => {
-  const wallet = useWallet();
-  const history = useHistory();
-  const { t } = useTranslation();
-  const invokeEnterPassphrase = useEnterPassphraseModal('publickey');
-
-  const handleBackup = useCallback(
-    async (publicKey: string, index) => {
-      let data: string | undefined;
-      await AuthenticationModalPromise({
-        confirmText: t('page.manageAddress.confirm'),
-        cancelText: t('page.manageAddress.cancel'),
-        title: t('page.manageAddress.backup-seed-phrase'),
-
-        validationHandler: async (password: string) => {
-          data = await wallet.getMnemonicFromPublicKey(password, publicKey);
-        },
-        async onFinished() {
-          await invokeEnterPassphrase(publicKey);
-          history.replace({
-            search: `?index=${index}`,
-          });
-          history.push({
-            pathname: '/settings/address-backup/mneonics',
-            state: {
-              data: data,
-              publicKey,
-              goBack: true,
-            },
-          });
-        },
-        onCancel() {
-          // do nothing
-        },
-        wallet,
-      });
-    },
-    [wallet?.getPrivateKey, wallet?.getMnemonics]
-  );
-  return handleBackup;
 };
